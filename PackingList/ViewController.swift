@@ -1,25 +1,3 @@
-/*
-* Copyright (c) 2014-present Razeware LLC
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-* THE SOFTWARE.
-*/
-
 import UIKit
 
 class ViewController: UIViewController {
@@ -29,17 +7,33 @@ class ViewController: UIViewController {
   @IBOutlet var tableView: UITableView!
   @IBOutlet var buttonMenu: UIButton!
   @IBOutlet var titleLabel: UILabel!
+  @IBOutlet weak var menuHeightConstraint: NSLayoutConstraint!
   
   //MARK: further class variables
   
   var slider: HorizontalItemList!
   var isMenuOpen = false
   var items: [Int] = [5, 6, 7]
+
   
   //MARK: class methods
   
   @IBAction func actionToggleMenu(_ sender: AnyObject) {
-    
+    isMenuOpen = !isMenuOpen
+    menuHeightConstraint.constant = isMenuOpen ? 184.0 : 44.0
+    titleLabel.text = isMenuOpen ? "Select Item" : "Packing List"
+
+    UIView.animate(withDuration: 1.0, delay: 0.0,
+      usingSpringWithDamping: 0.4, initialSpringVelocity: 10.0,
+      options: .curveEaseIn,
+      animations: {
+        self.view.layoutIfNeeded()
+        let angle: CGFloat = self.isMenuOpen ? .pi / 4 : 0.0
+        self.buttonMenu.transform = CGAffineTransform(rotationAngle:
+        angle)
+      },
+      completion: nil
+    )
   }
   
   func showItem(_ index: Int) {
@@ -56,7 +50,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     self.tableView?.rowHeight = 54.0
   }
   
