@@ -105,6 +105,12 @@ class ViewController: UIViewController {
                     conWidth.constant = 0.0
                     self.view.layoutIfNeeded()
     }, completion: nil)
+
+    UIView.animateKeyframes(withDuration: 1.0, delay: 1.0, options: [], animations: {
+      imageView.alpha = 0.0
+    }, completion: { _ in
+      imageView.removeFromSuperview()
+    })
   }
 }
 
